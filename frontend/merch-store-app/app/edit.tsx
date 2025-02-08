@@ -9,12 +9,18 @@ import {
   ToastAndroid,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Button, TextInput } from "react-native-paper";
+import { Appbar, Button, Card, Dialog, TextInput } from "react-native-paper";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { IMerch, Merch } from "@/interface/type";
 import { router, useLocalSearchParams } from "expo-router";
-import { getMerch, updateMerch } from "@/api/merch.api";
+import { deleteMerch, getMerch, updateMerch } from "@/api/merch.api";
+import {
+  AntDesign,
+  Feather,
+  MaterialCommunityIcons,
+  SimpleLineIcons,
+} from "@expo/vector-icons";
 
 const EditScreen = () => {
   const [merchName, setMerchName] = useState("");
@@ -23,6 +29,7 @@ const EditScreen = () => {
   const [merchQuantity, setMerchQuantity] = useState("");
   const [merchImage, setMerchImage] = useState("");
   const [merch_id, setMerch_id] = useState("");
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   const { _id } = useLocalSearchParams();
 
@@ -120,8 +127,41 @@ const EditScreen = () => {
     }
   };
 
+  const showDialog = () => setIsDialogVisible(true);
+  const hideDialog = () => setIsDialogVisible(false);
+
+  const handleDeleteMerch = async () => {
+    try {
+      const response = await deleteMerch(merch_id);
+      if (response.status === 200) {
+        Platform.OS === "web"
+          ? alert("Merch deleted successfully")
+          : ToastAndroid.show("Merch deleted successfully", ToastAndroid.SHORT);
+        router.push("/home");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
+      <View style={{ width: "100%" }}>
+        <Appbar.Header style={styles.appbar}>
+          <Appbar.BackAction onPress={() => router.back()} />
+          <Appbar.Content title="Edit Merch" />
+          <Appbar.Action
+            icon={() => (
+              <MaterialCommunityIcons
+                name="delete-variant"
+                size={22}
+                color="black"
+              />
+            )}
+            onPress={() => showDialog()}
+          />
+        </Appbar.Header>
+      </View>
       <ScrollView style={styles.scrollView}>
         <TextInput
           label={"Merch Name"}
@@ -187,6 +227,16 @@ const EditScreen = () => {
           Save
         </Button>
       </ScrollView>
+      <Dialog visible={isDialogVisible} onDismiss={hideDialog}>
+        <Dialog.Title>Delete Merch</Dialog.Title>
+        <Dialog.Content>
+          <Text>Are you sure you want to delete this merch?</Text>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={hideDialog}>Cancel</Button>
+          <Button onPress={handleDeleteMerch}>Yes</Button>
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 };
@@ -199,7 +249,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    borderWidth: 1,
+    backgroundColor: "white",
+  },
+  appbar: {
+    width: "100%",
+    backgroundColor: "white",
   },
   scrollView: {
     marginHorizontal: 20,
