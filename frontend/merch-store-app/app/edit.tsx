@@ -192,7 +192,7 @@ const EditScreen = () => {
             maxLength={9}
           />
           <TextInput
-            label={"Merch Price"}
+            label={"Merch Quantity"}
             value={merchQuantity}
             onChangeText={handQuantityChange}
             keyboardType="numeric"

@@ -23,26 +23,38 @@ const LoginScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium">Đăng nhập</Text>
+      <View style={styles.headerContainer}>
+        <Text variant="headlineMedium">Login</Text>
+      </View>
+
       <TextInput
         label="Email"
         value={email}
         onChangeText={setEmail}
         style={styles.input}
+        autoCapitalize="none"
       />
       <TextInput
-        label="Mật khẩu"
+        label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
       />
       <Button mode="contained" onPress={handleLogin}>
-        Đăng nhập
+        Login
       </Button>
-      <Button onPress={() => router.push("/registerScreen")}>
-        Chưa có tài khoản? Đăng ký
-      </Button>
+      <View style={styles.linkContainer}>
+        <Text>
+          Don't have an account?{" "}
+          <Text
+            style={styles.link}
+            onPress={() => router.push("/registerScreen")}
+          >
+            Register
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
@@ -50,6 +62,30 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20 },
-  input: { marginBottom: 10 },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "white",
+    gap: 10,
+    flexDirection: "column",
+    maxWidth: 500,
+    alignSelf: "center",
+    width: "100%",
+  },
+  input: {
+    marginBottom: 10,
+  },
+  headerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  linkContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  link: {
+    color: "blue",
+  },
 });

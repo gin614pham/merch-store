@@ -138,7 +138,7 @@ const add = () => {
             maxLength={9}
           />
           <TextInput
-            label={"Merch Price"}
+            label={"Merch Quantity"}
             value={textMerchQuantity}
             onChangeText={handQuantityChange}
             keyboardType="numeric"
